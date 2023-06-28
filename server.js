@@ -29,12 +29,21 @@ app.get('/todos', async (req, res) => {
 app.post('/todo', async (req, res) => { 
     try {
         const { title, description, dueDate, completed } = req.body;
+        console.log(dueDate);
+        console.log(typeof dueDate);
+        const changedDate=new Date(dueDate).toISOString().substr(0, 10);
+        console.log(changedDate);
+        
+        const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
+
         const newTodo = new Todos({
             title,
             description,
-            dueDate,
+            dueDate: changedDate,
             completed
         });
+        console.log(newTodo);
+
         await newTodo.save();
         res.status(200).send('To do created');
         
@@ -44,6 +53,32 @@ app.post('/todo', async (req, res) => {
         
     }
     
+})
+
+
+// To update a Todo 
+app.put('/todos/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { title, description, dueDate, completed } = req.body;
+        
+        const updatedTodo = await Todos.findByIdAndUpdate(id,
+            {
+                title,
+                description,
+                dueDate,
+                completed
+            },
+            { new: true }
+        );
+        res.status(200).send('To do updated');
+
+        
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'An error occurred' });
+    }
 })
 
 // To delete a todo
