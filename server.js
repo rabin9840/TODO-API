@@ -46,6 +46,20 @@ app.post('/todo', async (req, res) => {
     
 })
 
+// To delete a todo
+app.delete('/todos/:id', async (req, res) => {
+    try { 
+        const id = req.params.id;
+        await Todos.findByIdAndDelete(id);
+        res.status(200).send('To Do deleted');
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({message:'An error occurred'});
+
+    }
+})
+
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);
 })
