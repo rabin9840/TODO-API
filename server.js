@@ -18,12 +18,33 @@ app.use(express.json());
 app.get('/todos', async (req, res) => {
     try {
         const todos = await Todos.find({});
-        res.status(200).json(todos);
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            message: "Todo tasks retrieved successfully",
+            data: todos
+        }
+        );
     } catch (error) {
         console.log(error);
-        res.status(500).json({message:'An error occurred'});
+        res.status(500).json({
+            status: "error",
+            statusCode: 500,
+            message: "An error occured while retrieving todo tasks",
+            errors: [
+                {
+                    msg: error.message,
+                    name: error.name,
+                    value: error.value,
+                    location: error.location,
+                    params: error.params
+
+                }
+                
+            ]
+        });
     }
- })
+ }) 
 
  // Create a new todo
 app.post('/todo', async (req, res) => { 
@@ -86,11 +107,25 @@ app.delete('/todos/:id', async (req, res) => {
     try { 
         const id = req.params.id;
         await Todos.findByIdAndDelete(id);
-        res.status(200).send('To Do deleted');
+        res.status(200).json({
+            status: "success",
+            statusCode:200,
+            message:"Todo task deleted successfully"
+        })
     }
     catch (error) {
-        console.log(error);
-        res.status(500).json({message:'An error occurred'});
+        res.status(500).json({
+            status: "error",
+            statusCode: 500,
+            message: "An error occured while deleting todo task",
+            errors: [
+                {
+                    msg: error.message,
+                    name: error.name,
+                    value: error.value
+                }
+            ]
+        });
 
     }
 })
