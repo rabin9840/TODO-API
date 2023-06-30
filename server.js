@@ -60,16 +60,18 @@ app.get('/todos', async (req, res) => {
 app.post('/todo', async (req, res) => { 
     try {
         const { title, description, dueDate, completed } = req.body;
-        const changedDate=new Date(dueDate).toISOString().substr(0, 10);
-        console.log(changedDate);
-        console.log(new Date(dueDate).toISOString());
+        // const changedDate=new Date(dueDate).toISOString().substr(0, 10);
+        // console.log(changedDate);
+        // console.log(new Date(dueDate).toISOString());
+        const momentDate = moment(dueDate).format('YYYY-MM-DD');
         
-        const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
+        // const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
 
         const newTodo = new Todos({
             title,
             description,
-            dueDate: changedDate,
+            // dueDate: changedDate,
+            dueDate:momentDate,
             completed
         });
         console.log(newTodo);
@@ -109,22 +111,19 @@ app.put('/todos/:id', async (req, res) => {
         const { title, description, dueDate, completed } = req.body;
         const momentDate = moment(dueDate).format('YYYY-MM-DD');
         console.log(momentDate);
-        const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
-        console.log(dueDate);
-        console.log(new Date(dueDate));
-        console.log(new Date(dueDate).toUTCString());
+        // const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
         
         // to solve timezone issue
-        function parseDatetoString(dateString) {
-            const [month, day, year] = dateString.split('/');
-            console.log("month:" + month);
-            console.log("day:" + day);
-            console.log("year:" + year);
-            console.log('date:'+`${year}-${month}-${day}`);
-            return new Date(`${year}-${month}-${day}`);
-        }
+        // function parseDatetoString(dateString) {
+        //     const [month, day, year] = dateString.split('/');
+        //     console.log("month:" + month);
+        //     console.log("day:" + day);
+        //     console.log("year:" + year);
+        //     console.log('date:'+`${year}-${month}-${day}`);
+        //     return new Date(`${year}-${month}-${day}`);
+        // }
 
-        console.log("parse date:" + parseDatetoString(dueDate));
+        // console.log("parse date:" + parseDatetoString(dueDate));
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             res.status(400).json({
