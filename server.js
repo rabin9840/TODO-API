@@ -1,12 +1,13 @@
-const express= require('express');
 const dotenv = require('dotenv');
+const express = require('express');
 const connectDB = require('./config/db');
 const Todos = require('./models/todo');
 const mongoose = require('mongoose');
 const moment= require('moment');
 
 //Load config file
-dotenv.config({path:'./config/config.env'});
+// dotenv.config({path:'./config/config.env'});
+dotenv.config();
 const app= express();
 const port = process.env.PORT;
 
