@@ -25,7 +25,7 @@ const createTodo = async (title, description, dueDate, completed) => {
 const updateTodo = async (id, title, description, dueDate, completed) => {
     const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
     const momentDate = moment(isoDate).format('YYYY-MM-DD');
-    
+
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('Invalid ID');
         }
@@ -49,8 +49,6 @@ const deleteTodo = async (id) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('Invalid ID');
         }
-        //const deletedTodo = await Todos.findByIdAndDelete(id);
-        // return deletedTodo;
         await Todos.findByIdAndDelete(id);
         
     } catch (error) {
