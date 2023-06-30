@@ -2,7 +2,8 @@ const express= require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const Todos = require('./models/todo');
-const mongoose= require('mongoose');
+const mongoose = require('mongoose');
+const moment= require('moment');
 
 //Load config file
 dotenv.config({path:'./config/config.env'});
@@ -61,6 +62,7 @@ app.post('/todo', async (req, res) => {
         const { title, description, dueDate, completed } = req.body;
         const changedDate=new Date(dueDate).toISOString().substr(0, 10);
         console.log(changedDate);
+        console.log(new Date(dueDate).toISOString());
         
         const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
 
@@ -105,6 +107,24 @@ app.put('/todos/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const { title, description, dueDate, completed } = req.body;
+        const momentDate = moment(dueDate).format('YYYY-MM-DD');
+        console.log(momentDate);
+        const formattedDueDate = new Date(dueDate).toISOString().split('T')[0];
+        console.log(dueDate);
+        console.log(new Date(dueDate));
+        console.log(new Date(dueDate).toUTCString());
+        
+        // to solve timezone issue
+        function parseDatetoString(dateString) {
+            const [month, day, year] = dateString.split('/');
+            console.log("month:" + month);
+            console.log("day:" + day);
+            console.log("year:" + year);
+            console.log('date:'+`${year}-${month}-${day}`);
+            return new Date(`${year}-${month}-${day}`);
+        }
+
+        console.log("parse date:" + parseDatetoString(dueDate));
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             res.status(400).json({
@@ -127,7 +147,7 @@ app.put('/todos/:id', async (req, res) => {
             {
                 title,
                 description,
-                dueDate,
+                dueDate:momentDate,
                 completed
             },
             { new: true }
@@ -135,36 +155,30 @@ app.put('/todos/:id', async (req, res) => {
         console.log(updatedTodo);
 
         // if no todo found
-        // if (!updatedTodo) {
-        //     console.log("inside toto");
-        //     res.status(404).json({
-        //         status: "error",
-        //         statusCode: 404,
-        //         message: "Todo task not found",
-        //         errors: [
-        //             {
-        //                 msg: "Todo task not found",
-        //                 name: "Todo task not found",
-        //                 value: "Todo task not found"
-        //             }
-        //         ]
-        //     });
-        // }
-        // else {
-        //     res.status(200).json({  
-        //         status: "success",
-        //         statusCode: 200,
-        //         message: "Todo task updated successfully",
-        //         data: updatedTodo
-        //     });
+        if (!updatedTodo) {
+            console.log("inside toto");
+            res.status(404).json({
+                status: "error",
+                statusCode: 404,
+                message: "Todo task not found",
+                errors: [
+                    {
+                        msg: "Todo task not found",
+                        name: "Todo task not found",
+                        value: "Todo task not found"
+                    }
+                ]
+            });
+        }
+        else {
+            res.status(200).json({  
+                status: "success",
+                statusCode: 200,
+                message: "Todo task updated successfully",
+                data: updatedTodo
+            });
             
-        // }
-        res.status(200).json({  
-               status: "success",
-               statusCode: 200,
-               message: "Todo task updated successfully",
-               data: updatedTodo
-        });
+        }
         
     }
     catch (err) {
