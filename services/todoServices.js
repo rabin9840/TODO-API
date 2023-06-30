@@ -9,7 +9,9 @@ const getAllTodos = async () => {
 }
 
 const createTodo = async (title, description, dueDate, completed) => {
-        const momentDate = moment(dueDate).format('YYYY-MM-DD');
+    const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
+    const momentDate = moment(isoDate).format('YYYY-MM-DD');
+    
         const newTodo = new Todos({
             title,
             description,
@@ -21,7 +23,9 @@ const createTodo = async (title, description, dueDate, completed) => {
 }
 
 const updateTodo = async (id, title, description, dueDate, completed) => {
-        const momentDate = moment(dueDate).format('YYYY-MM-DD');
+    const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
+    const momentDate = moment(isoDate).format('YYYY-MM-DD');
+    
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('Invalid ID');
         }
