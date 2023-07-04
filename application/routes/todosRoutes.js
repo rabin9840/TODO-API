@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const { validateTodo } = require('../middleware/validationMiddleware');
 const todoController = require('../controllers/todoController');
 
 // GET /todos
 router.get('/', todoController.getAllTodos);
 
 // POST /todos
+// router.post('/', validateTodo, todoController.createTodo);
 router.post('/', todoController.createTodo);
 
 // PUT /todos/:id   

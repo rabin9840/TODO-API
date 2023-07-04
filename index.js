@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./application/config/db');
 const todoRouter = require('./application/routes/todosRoutes');
+const { validateTodo} = require('./application/middleware/validationMiddleware');
 
 dotenv.config();
 
@@ -12,6 +13,9 @@ connectDB();
 
 //Middleware
 app.use(express.json());
+
+app.use(validateTodo);
+
 
 //  Import routes
 app.use('/todos', todoRouter);
