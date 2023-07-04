@@ -1,14 +1,13 @@
-const passport = require('passport');
-const { Strategy: HeaderStrategy } = require('passport-http-header-strategy');
+const passport = require('passport');   
+const BasicStrategy = require('passport-http').BasicStrategy;
+require('dotenv').config();
 
-// Load environment variables
-require('dotnev').config();
+const userId = process.env.USER_ID;
 
-// configure passport to use the HeaderStrategy
 passport.use(
-    new HeaderStrategy((headerValue, done) => {
-        if (headerValue === process.env.AUTH_STRING) {
-            return done(null, true); // AUTHENTICATION SUCCESS
+    new BasicStrategy((username, password, done) => {
+        if (username === userId) {
+            return done(null, true);
         }
         else {
             return done(null, false);
@@ -16,8 +15,4 @@ passport.use(
     })
 );
 
-exports.authenticate = (req, res, next) => {
-    passport.authenticate('header', {
-        session: false
-    })(req, res, next);
-};
+exports.authenticate = passport.authenticate('basic', { session: false });
