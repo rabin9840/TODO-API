@@ -25,8 +25,13 @@ const createTodo = async (title, description, dueDate, isActive,status) => {
 }
 
 const updateTodo = async (id, title, description, dueDate, isActive,status) => {
-    const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
-    const momentDate = moment(isoDate).format('YYYY-MM-DD');
+    // const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
+    // const momentDate = moment(isoDate).format('YYYY-MM-DD');
+
+    const momentDate = dueDate ? moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD') : undefined;
+    console.log(id);
+    console.log(id);
+    console.log(dueDate);
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error('Invalid ID');
