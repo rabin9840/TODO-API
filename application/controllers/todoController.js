@@ -1,6 +1,6 @@
 const todoService = require('../services/todoServices');
-// const { validationResult } = require('express-validator');
-// const { createTodoValidation } = require('../validation/todoValidation');
+const { validationResult } = require('express-validator');
+const { createTodoValidation } = require('../validation/todoValidation');
 
 const getAllTodos = async (req, res) => {
     try {
@@ -43,26 +43,27 @@ const getAllTodos = async (req, res) => {
 
 const createTodo = async (req, res) => {
 
-    // //check for validation errors
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //     console.log(errors.array()[0].msg);
-    //     return res.status(422).json({
-    //         status: "error",
-    //         statusCode: 422,
-    //         message: "Validation errors",
-    //         // different way of error presenting
-    //         errors:errors.array()
+    //check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors.array()[0].msg);
+        return res.status(422).json({
+            status: "error",
+            statusCode: 422,
+            message: "Validation errors",
+            // different way of error presenting
+            errors:errors.array()
             
-    //     })
-    // }
+        })
+    }
     try { 
-        const { title, description, dueDate, completed } = req.body;
+        const { title, description, dueDate, isActive,status } = req.body;
         const newTodo = await todoService.createTodo(
             title,
             description,
             dueDate,
-            completed
+            isActive,
+            status
         );
         res.status(201).json({
             status: "success",
@@ -94,13 +95,14 @@ const createTodo = async (req, res) => {
 const updateTodo = async (req, res) => { 
     try {
         const id = req.params.id;
-        const { title, description, dueDate, completed } = req.body;
+        const { title, description, dueDate, isActive, status } = req.body;
         const updatedTodo = await todoService.updateTodo(
             id,
             title,
             description,
             dueDate,
-            completed
+            isActive,
+            status
         );
         res.status(200).json({  
             status: "success",
@@ -156,11 +158,10 @@ const deleteTodo = async (req, res) => {
 
 module.exports = {  
     getAllTodos,
-    // createTodo: [
-    //     createTodoValidation,
-    //     createTodo
-    // ],
-    createTodo,
+    createTodo: [
+        createTodoValidation,
+        createTodo
+    ],
     updateTodo,
     deleteTodo
 }
