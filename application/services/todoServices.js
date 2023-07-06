@@ -8,21 +8,23 @@ const getAllTodos = async () => {
         return todos;
 }
 
-const createTodo = async (title, description, dueDate, completed) => {
-    const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
-    const momentDate = moment(isoDate).format('YYYY-MM-DD');
+const createTodo = async (title, description, dueDate, isActive,status) => {
+    // const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
+    // const momentDate = moment(isoDate).format('YYYY-MM-DD');
+    const momentDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
     
         const newTodo = new Todos({
             title,
             description,
             dueDate:momentDate,
-            completed
+            isActive,
+            status
         });
         await newTodo.save();
         return newTodo;
 }
 
-const updateTodo = async (id, title, description, dueDate, completed) => {
+const updateTodo = async (id, title, description, dueDate, isActive,status) => {
     const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
     const momentDate = moment(isoDate).format('YYYY-MM-DD');
 
@@ -34,7 +36,8 @@ const updateTodo = async (id, title, description, dueDate, completed) => {
                 title,
                 description,
                 dueDate:momentDate,
-                completed
+                isActive,
+                status
             },
             { new: true }
         );

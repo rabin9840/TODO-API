@@ -4,10 +4,19 @@ const connectDB = require('./application/config/db');
 const todoRouter = require('./application/routes/todosRoutes');
 // const { validateTodo} = require('./application/middleware/validationMiddleware');
 const passport= require('passport');
+const cors = require('cors');
+
 
 dotenv.config();
 
 const app = express();
+
+// cors middleware for cross origin requests
+app.use(cors(
+    {
+        origin: 'http://127.0.0.1:5173'
+    }
+));
 
 //Connect to MongoDB
 connectDB();

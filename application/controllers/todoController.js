@@ -57,12 +57,13 @@ const createTodo = async (req, res) => {
     //     })
     // }
     try { 
-        const { title, description, dueDate, completed } = req.body;
+        const { title, description, dueDate, isActive, status } = req.body;
         const newTodo = await todoService.createTodo(
             title,
             description,
             dueDate,
-            completed
+            isActive,
+            status
         );
         res.status(201).json({
             status: "success",
@@ -94,13 +95,14 @@ const createTodo = async (req, res) => {
 const updateTodo = async (req, res) => { 
     try {
         const id = req.params.id;
-        const { title, description, dueDate, completed } = req.body;
+        const { title, description, dueDate, isActive, status } = req.body;
         const updatedTodo = await todoService.updateTodo(
             id,
             title,
             description,
             dueDate,
-            completed
+            isActive,
+            status
         );
         res.status(200).json({  
             status: "success",

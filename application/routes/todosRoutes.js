@@ -16,6 +16,6 @@ router.post('/', validateTodo, todoController.createTodo);
 router.put('/:id', todoController.updateTodo);
 
 // DELETE /todos/:id
-router.delete('/:id', todoController.deleteTodo);
+router.delete('/:id',authenticate, todoController.deleteTodo);
 
 module.exports = router;
