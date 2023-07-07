@@ -29,8 +29,11 @@ const createTodo = async (title, description, dueDate, isActive, status) => {
 const updateTodo = async (id, title, description, dueDate, isActive,status) => {
     // const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
     // const momentDate = moment(isoDate).format('YYYY-MM-DD');
+    const formats = ['YYYY/MM/DD', 'M/D/YYYY', 'YYYY-MM-DD'];
 
-    const momentDate = dueDate ? moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD') : undefined;
+    //  const momentDate = dueDate ? moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD') : undefined;
+      const momentDate = dueDate ?  moment(dueDate, formats).format('YYYY-MM-DD') : undefined;
+   
     console.log(id);
     console.log(id);
     console.log(dueDate);

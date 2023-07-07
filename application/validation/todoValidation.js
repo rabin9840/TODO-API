@@ -4,8 +4,10 @@ const { body } = require('express-validator');
 exports.createTodoValidation = [
     body('title').notEmpty().withMessage('Title is required'),
     // body('dueDate').isISO8601().withMessage("Invalid date format"),
-    body('dueDate').trim().isDate().withMessage('Must be valid date')
+    body('dueDate').trim().isDate().withMessage('Must be valid date'),
 ];
+
+
 
 // Validation rules for dueDate
              

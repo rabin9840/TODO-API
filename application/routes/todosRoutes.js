@@ -13,7 +13,7 @@ router.post('/', validateTodo, todoController.createTodo);
 // router.post('/', todoController.createTodo);
 
 // PUT /todos/:id   
-router.put('/:id', authenticate,todoController.updateTodo);
+router.put('/:id', authenticate,validateTodo,todoController.updateTodo);
 
 // DELETE /todos/:id
 router.delete('/:id',authenticate, todoController.deleteTodo);
