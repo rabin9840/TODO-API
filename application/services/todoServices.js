@@ -55,16 +55,29 @@ const updateTodo = async (id, title, description, dueDate, isActive,status) => {
 }
 
 const deleteTodo = async (id) => { 
-    try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            throw new Error('Invalid ID');
-        }
+    // try {
+    //     if (!mongoose.Types.ObjectId.isValid(id)) {
+    //         throw new Error('Invalid ID');
+    //     }
+    //     await Todos.findByIdAndDelete(id);
+        
+    // } catch (error) {
+    //     throw new Error('An error occured while deleting todo task');
+        
+    // }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        const error = new Error('Invalid ID');
+        error.statusCode = 400; // Set the desired status code
+        throw error;
+      }
+    
+      try {
         await Todos.findByIdAndDelete(id);
-        
-    } catch (error) {
-        throw new Error('An error occured while deleting todo task');
-        
-    }
+      } catch (error) {
+        const customError = new Error('An error occurred while deleting the todo task');
+        customError.statusCode = 500; // Set the desired status code
+        throw customError;
+      }
 }
 module.exports = {
     getAllTodos,
