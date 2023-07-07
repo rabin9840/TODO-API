@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const errorHandler = require('./errorHandler');
 const connectDB = require('./application/config/db');
 const todoRouter = require('./application/routes/todosRoutes');
 // const { validateTodo} = require('./application/middleware/validationMiddleware');
@@ -10,6 +11,7 @@ const cors = require('cors');
 dotenv.config();
 
 const app = express();
+
 
 // cors middleware for cross origin requests
 app.use(cors(
@@ -39,6 +41,7 @@ app.use(passport.initialize());
 
 //  Import routes
 app.use('/todos', todoRouter);
+app.use(errorHandler);
 
 const port = process.env.PORT || 3000;
 

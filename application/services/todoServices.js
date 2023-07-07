@@ -8,10 +8,12 @@ const getAllTodos = async () => {
         return todos;
 }
 
-const createTodo = async (title, description, dueDate, isActive,status) => {
+const createTodo = async (title, description, dueDate, isActive, status) => {
+    const formats = ['YYYY/MM/DD', 'M/D/YYYY', 'YYYY-MM-DD'];
     // const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
     // const momentDate = moment(isoDate).format('YYYY-MM-DD');
-    const momentDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
+    // const momentDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
+    const momentDate = moment(dueDate, formats).format('YYYY-MM-DD');
     
         const newTodo = new Todos({
             title,

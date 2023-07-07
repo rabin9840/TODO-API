@@ -2,7 +2,7 @@ const todoService = require('../services/todoServices');
 const { validationResult } = require('express-validator');
 const { createTodoValidation } = require('../validation/todoValidation');
 const errorHandler= require('../../errorHandler');
-const getAllTodos = async (req, res,next) => {
+const getAllTodos = async (req, res) => {
     try {
         const todos = await todoService.getAllTodos();
         if (todos.length === 0) {
@@ -24,11 +24,25 @@ const getAllTodos = async (req, res,next) => {
         }
         
     } catch (error) {
-        next(error);   
+        // res.status(500).json({
+        //     status: "error",
+        //     statusCode: 500,
+        //     message: "An error occured while retrieving todo tasks",
+        //     errors: [
+        //         {
+        //             msg: error.message,
+        //             name: error.name,
+        //             value: error.value,
+        //         }
+                
+        //     ]
+        // });
+        next(error);
+        
     }
 }
 
-const createTodo = async (req, res,next) => {
+const createTodo = async (req, res) => {
 
     //check for validation errors
     // const errors = validationResult(req);
@@ -62,6 +76,18 @@ const createTodo = async (req, res,next) => {
 
     }
     catch (error) {
+        // res.status(500).json({
+        //     status: "error",
+        //     statusCode: 500,
+        //     message: "An error occured while creating todo task",
+        //     errors: [
+        //         {
+        //             msg: error.message,
+        //             name: error.name,
+        //             value: error.value
+        //         }
+        //     ]
+        // });
         next(error); // Pass the error to the error handler middleware
         
         
@@ -69,7 +95,7 @@ const createTodo = async (req, res,next) => {
 
 }
 
-const updateTodo = async (req, res,next) => { 
+const updateTodo = async (req, res) => { 
     try {
         const id = req.params.id;
         const { title, description, dueDate, isActive, status } = req.body;
@@ -89,12 +115,25 @@ const updateTodo = async (req, res,next) => {
         });
 
     } catch (error) {
+        // res.status(500).json({
+        //     status: "error",
+        //     statusCode: 500,
+        //     message: 'An error occurred while updating the todo task',
+        //     errors: [
+        //         {
+        //             msg: error.message,
+        //             name: error.name,
+        //             value: error.value
+        //         }
+        //     ]
+        // });
         next(error);
+        
     }
    
 }
 
-const deleteTodo = async (req, res,next) => {
+const deleteTodo = async (req, res) => {
     try {
         const id = req.params.id;
         await todoService.deleteTodo(id);
@@ -105,6 +144,18 @@ const deleteTodo = async (req, res,next) => {
         });
     }
     catch (error) {
+        // res.status(500).json({
+        //     status: "error",
+        //     statusCode: 500,
+        //     message: "An error occured while deleting todo task",
+        //     errors: [
+        //         {
+        //             msg: error.message,
+        //             name: error.name,
+        //             value: error.value
+        //         }
+        //     ]
+        // });
         next(error);
         
     }
