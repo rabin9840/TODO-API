@@ -12,7 +12,7 @@ router.get('/', authenticate, todoController.getAllTodos);
 // router.get('/todosCount', authenticate, todoController.getTodosCount);
 router.get('/todosCount', authenticate, todoController.getTodosCount);
 
-router.get('/firstTen', authenticate, todoController.getFirstTenTodos);
+router.get('/firstTenTodos', authenticate, todoController.getFirstTenTodos);
 
 
 // POST /todos
