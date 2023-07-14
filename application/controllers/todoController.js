@@ -124,11 +124,26 @@ const getTodosCount = async (req, res, next) => {
     }
 }
 
+const getFirstTenTodos = async (req, res, next) => {
+    try {
+        const firstTenTodos = await todoService.getFirstTenTodos();
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            message: "Top Ten Todos Tasks retrieved successfully",
+            data: firstTenTodos
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 module.exports = {
     getAllTodos,
     createTodo: [createTodoValidation, createTodo],
     updateTodo,
     deleteTodo,
-    getTodosCount
+    getTodosCount,
+    getFirstTenTodos
 }
