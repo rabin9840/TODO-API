@@ -1,8 +1,8 @@
 const todoService = require('../services/todoServices');
 const { validationResult } = require('express-validator');
 const { createTodoValidation } = require('../validation/todoValidation');
-const errorHandler= require('../../errorHandler');
-const getAllTodos = async (req, res,next) => {
+const errorHandler = require('../../errorHandler');
+const getAllTodos = async (req, res, next) => {
     try {
         const todos = await todoService.getAllTodos();
         if (todos.length === 0) {
@@ -20,15 +20,15 @@ const getAllTodos = async (req, res,next) => {
                 message: "Todo tasks retrieved successfully",
                 data: todos
             }
-            );    
+            );
         }
-        
+
     } catch (error) {
-        next(error);   
+        next(error);
     }
 }
 
-const createTodo = async (req, res,next) => {
+const createTodo = async (req, res, next) => {
 
     //check for validation errors
     // const errors = validationResult(req);
@@ -41,10 +41,10 @@ const createTodo = async (req, res,next) => {
     //         statusCode: 400,
     //         // different way of error presenting
     //         errors:errors.array()
-            
+
     //     })
     // }
-    try { 
+    try {
         const { title, description, dueDate, isActive, status } = req.body;
         const newTodo = await todoService.createTodo(
             title,
@@ -57,19 +57,19 @@ const createTodo = async (req, res,next) => {
             status: "success",
             statusCode: 201,
             message: "Todo task created successfully",
-            data:newTodo
+            data: newTodo
         });
 
     }
     catch (error) {
         next(error); // Pass the error to the error handler middleware
-        
-        
+
+
     }
 
 }
 
-const updateTodo = async (req, res,next) => { 
+const updateTodo = async (req, res, next) => {
     try {
         const id = req.params.id;
         const { title, description, dueDate, isActive, status } = req.body;
@@ -81,7 +81,7 @@ const updateTodo = async (req, res,next) => {
             isActive,
             status
         );
-        res.status(200).json({  
+        res.status(200).json({
             status: "success",
             statusCode: 200,
             message: "Todo task updated successfully",
@@ -91,10 +91,10 @@ const updateTodo = async (req, res,next) => {
     } catch (error) {
         next(error);
     }
-   
+
 }
 
-const deleteTodo = async (req, res,next) => {
+const deleteTodo = async (req, res, next) => {
     try {
         const id = req.params.id;
         await todoService.deleteTodo(id);
@@ -106,13 +106,29 @@ const deleteTodo = async (req, res,next) => {
     }
     catch (error) {
         next(error);
-        
+
     }
 }
 
-module.exports = {  
+const getTodosCount = async (req, res, next) => {
+    try {
+        const count = await todoService.getTodosCount();
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            message: "Todo tasks count retrieved successfully",
+            data: count
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+module.exports = {
     getAllTodos,
     createTodo: [createTodoValidation, createTodo],
     updateTodo,
-    deleteTodo
+    deleteTodo,
+    getTodosCount
 }
