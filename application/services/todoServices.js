@@ -121,11 +121,38 @@ const getFirstTenTodos = async () => {
         throw customError;
     }
 }
+
+const getFirstTenTodosDuration = async () => {
+    try {
+        const firstTenTodosDuration = await Todos.aggregate([
+            {
+                $sort: { dueDate: 1 }
+            },
+            { $limit: 10 },
+            {
+                $project: {
+                    task: '$title',
+                    duration: {
+                        $subtract: ['$dueDate', new Date()]
+                    }
+                }
+            }
+        ])
+
+        return firstTenTodosDuration;
+    }
+    catch (error) {
+        const customError = new Error('An error occurred while getting the first ten todo tasks duration');
+        customError.statusCode = 500;
+        throw customError;
+    }
+}
 module.exports = {
     getAllTodos,
     createTodo,
     updateTodo,
     deleteTodo,
     getTodosCount,
-    getFirstTenTodos
+    getFirstTenTodos,
+    getFirstTenTodosDuration
 }

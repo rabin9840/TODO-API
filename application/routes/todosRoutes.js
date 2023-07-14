@@ -14,6 +14,8 @@ router.get('/todosCount', authenticate, todoController.getTodosCount);
 
 router.get('/firstTenTodos', authenticate, todoController.getFirstTenTodos);
 
+router.get('/firstTenTodosDuration', authenticate, todoController.getFirstTenTodosDuration);
+
 
 // POST /todos
 router.post('/', validateTodo, todoController.createTodo);
