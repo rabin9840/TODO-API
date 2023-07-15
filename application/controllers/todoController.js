@@ -138,6 +138,33 @@ const getFirstTenTodos = async (req, res, next) => {
     }
 }
 
+const getFirstTenTodosDuration = async (req, res, next) => {
+    try {
+        const firstTenTodosDuration = await todoService.getFirstTenTodosDuration();
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            message: "Top Ten Todos Tasks duration retrieved successfully",
+            data: firstTenTodosDuration
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+const getRecentTodos = async (req, res, next) => {
+    try {
+        const recentTodos = await todoService.getRecentTodos();
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            message: "Recently added Todos",
+            data: recentTodos
+        });
+    } catch (error) {
+        next(error);
+    }
+}
 
 module.exports = {
     getAllTodos,
@@ -145,5 +172,7 @@ module.exports = {
     updateTodo,
     deleteTodo,
     getTodosCount,
-    getFirstTenTodos
+    getFirstTenTodos,
+    getFirstTenTodosDuration,
+    getRecentTodos
 }
