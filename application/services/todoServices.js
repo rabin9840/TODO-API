@@ -58,16 +58,6 @@ const updateTodo = async (id, title, description, dueDate, isActive, status) => 
 }
 
 const deleteTodo = async (id) => {
-    // try {
-    //     if (!mongoose.Types.ObjectId.isValid(id)) {
-    //         throw new Error('Invalid ID');
-    //     }
-    //     await Todos.findByIdAndDelete(id);
-
-    // } catch (error) {
-    //     throw new Error('An error occured while deleting todo task');
-
-    // }
     if (!mongoose.Types.ObjectId.isValid(id)) {
         const error = new Error('Invalid ID');
         error.statusCode = 400; // Set the desired status code
@@ -147,6 +137,24 @@ const getFirstTenTodosDuration = async () => {
         throw customError;
     }
 }
+
+const getRecentTodos = async () => {
+    try {
+        const recentTodos = await Todos.aggregate([
+            {
+                $sort: { createdAt: -1 }
+            },
+            { $limit: 10 },
+        ])
+
+        return recentTodos;
+    }
+    catch (error) {
+        const customError = new Error('An error occurred while getting the recently added todos');
+        customError.statusCode = 500;
+        throw customError;
+    }
+}
 module.exports = {
     getAllTodos,
     createTodo,
@@ -154,5 +162,6 @@ module.exports = {
     deleteTodo,
     getTodosCount,
     getFirstTenTodos,
-    getFirstTenTodosDuration
+    getFirstTenTodosDuration,
+    getRecentTodos
 }

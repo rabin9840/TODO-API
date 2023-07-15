@@ -152,6 +152,20 @@ const getFirstTenTodosDuration = async (req, res, next) => {
     }
 }
 
+const getRecentTodos = async (req, res, next) => {
+    try {
+        const recentTodos = await todoService.getRecentTodos();
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            message: "Recently added Todos",
+            data: recentTodos
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getAllTodos,
     createTodo: [createTodoValidation, createTodo],
@@ -159,5 +173,6 @@ module.exports = {
     deleteTodo,
     getTodosCount,
     getFirstTenTodos,
-    getFirstTenTodosDuration
+    getFirstTenTodosDuration,
+    getRecentTodos
 }
