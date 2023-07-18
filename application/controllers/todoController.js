@@ -9,6 +9,7 @@ const getAllTodos = async (req, res, next) => {
 
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
+        console.log("start index, limit, endindex " + startIndex, limit, endIndex);
 
         const todos = await todoService.getAllTodos(startIndex, limit);
         if (todos.length === 0) {
