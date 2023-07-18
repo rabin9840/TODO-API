@@ -18,12 +18,12 @@ router.get('/firstTenTodosDuration', authenticate, todoController.getFirstTenTod
 
 router.get('/recentTodos', authenticate, todoController.getRecentTodos);
 
-
 // POST /todos
 router.post('/', validateTodo, todoController.createTodo);
 // router.post('/', todoController.createTodo);
 
 // PUT /todos/:id   
+// validate for update
 router.put('/:id', authenticate, todoController.updateTodo);
 
 // DELETE /todos/:id

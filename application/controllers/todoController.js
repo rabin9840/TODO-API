@@ -4,6 +4,7 @@ const { createTodoValidation } = require('../validation/todoValidation');
 const errorHandler = require('../../errorHandler');
 const getAllTodos = async (req, res, next) => {
     try {
+
         const todos = await todoService.getAllTodos();
         if (todos.length === 0) {
             res.status(204).json({
