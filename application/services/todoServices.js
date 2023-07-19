@@ -3,8 +3,19 @@ const Todos = require('../models/todo');
 const moment = require('moment');
 const mongoose = require('mongoose');
 
-const getAllTodos = async () => {
-    const todos = await Todos.find({});
+const getAllTodos = async (startIndex, limit, status) => {
+    let query = {};
+
+    // const todos = await Todos.find({});
+
+    // applying only pagination
+    // const todos = await Todos.find({}).skip(startIndex).limit(limit);
+
+    // apply status filter if status is available
+    if (status) {
+        query.status = status;
+    }
+    const todos = await Todos.find(query).skip(startIndex).limit(limit);
     return todos;
 }
 

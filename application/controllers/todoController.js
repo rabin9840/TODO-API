@@ -4,7 +4,15 @@ const { createTodoValidation } = require('../validation/todoValidation');
 const errorHandler = require('../../errorHandler');
 const getAllTodos = async (req, res, next) => {
     try {
-        const todos = await todoService.getAllTodos();
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const status = req.query.status || "todo";
+
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        console.log("start index, limit, endindex, status " + startIndex, limit, endIndex, status);
+
+        const todos = await todoService.getAllTodos(startIndex, limit, status);
         if (todos.length === 0) {
             res.status(204).json({
                 status: "success",

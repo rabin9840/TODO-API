@@ -3,6 +3,8 @@ const router = express.Router();
 const { validateTodo } = require('../middleware/validationMiddleware');
 const todoController = require('../controllers/todoController');
 const { authenticate } = require('../middleware/authenticationMiddleware');
+const { createTodoValidation } = require('../validation/todoValidation');
+const { updateTodoValidation } = require('../validation/todoUpdateValidation');
 
 // GET /todos
 router.get('/', authenticate, todoController.getAllTodos);
@@ -18,13 +20,13 @@ router.get('/firstTenTodosDuration', authenticate, todoController.getFirstTenTod
 
 router.get('/recentTodos', authenticate, todoController.getRecentTodos);
 
-
 // POST /todos
-router.post('/', validateTodo, todoController.createTodo);
+router.post('/', validateTodo(createTodoValidation), todoController.createTodo);
 // router.post('/', todoController.createTodo);
 
 // PUT /todos/:id   
-router.put('/:id', authenticate, todoController.updateTodo);
+// validate for update
+router.put('/:id', authenticate, validateTodo(updateTodoValidation), todoController.updateTodo);
 
 // DELETE /todos/:id
 router.delete('/:id', authenticate, todoController.deleteTodo);
