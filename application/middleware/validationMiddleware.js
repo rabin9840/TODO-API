@@ -1,7 +1,4 @@
 const { validationResult } = require('express-validator');
-const { createTodoValidation } = require('../validation/todoValidation');
-const { updateTodoValidation } = require("../validation/todoUpdateValidation")
-
 // const validateTodo = [
 //   createTodoValidation, // Apply createTodoValidation rules
 //   (req, res, next) => {
