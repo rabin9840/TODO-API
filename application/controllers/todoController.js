@@ -16,23 +16,31 @@ const getAllTodos = async (req, res, next) => {
         console.log("start index, limit, endindex, status " + startIndex, limit, endIndex, status);
 
         const todos = await todoService.getAllTodos(startIndex, limit, status, page, dueDate, isActive, title);
-        if (todos.length === 0) {
-            res.status(204).json({
-                status: "success",
-                statusCode: 204,
-                message: "No todo tasks found",
-                data: todos
-            })
-        }
-        else {
-            res.status(200).json({
-                status: "success",
-                statusCode: 200,
-                message: "Todo tasks retrieved successfully",
-                data: todos
-            }
-            );
-        }
+        // if (todos.length === 0) {
+        //     res.status(204).json({
+        //         status: "success",
+        //         statusCode: 204,
+        //         message: "No todo tasks found",
+        //         data: todos
+        //     })
+        // }
+        // else {
+        //     res.status(200).json({
+        //         status: "success",
+        //         statusCode: 200,
+        //         message: "Todo tasks retrieved successfully",
+        //         data: todos
+        //     }
+        //     );
+        // }
+        const statusCode = todos.length === 0 ? 204 : 200;
+        const message = todos.length === 0 ? "No todo tasks found" : "Todo tasks retrieved successfully";
+        res.status(statusCode).json({
+            status: "success",
+            statusCode,
+            message,
+            data: todos
+        });
 
     } catch (error) {
         next(error);

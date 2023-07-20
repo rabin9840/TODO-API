@@ -105,9 +105,16 @@ const getTodosCount = async () => {
             {
                 $group: {
                     _id: '$status',
-                    count: { $sum: 1 }
-                }
-            }
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                $project: {
+                    _id: 0, // Exclude the default _id field from the result
+                    status: '$_id', // Create a new field called "status" with the value from _id
+                    count: 1, // Include the count field in the result
+                },
+            },
         ])
 
         return todosCount;
