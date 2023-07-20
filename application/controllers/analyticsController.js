@@ -50,9 +50,11 @@ const getTodoCountForDateRange = async (req, res, next) => {
         let startDate, endDate;
         switch (datePreset) {
             case 'last7days':
-                startDate = new Date().slice(0, 10);
+                startDate = new Date();
                 startDate.setDate(startDate.getDate() - 7);
-                endDate = new Date().slice(0, 10);
+                startDate = startDate.toISOString().slice(0, 10);
+                endDate = new Date();
+                endDate = endDate.toISOString().slice(0, 10);
                 break;
             case 'last30days':
                 console.log("This is last 30 days");
@@ -72,6 +74,11 @@ const getTodoCountForDateRange = async (req, res, next) => {
 
                 startDate = new Date();
                 startDate.setDate(startDate.getDate() - 30);
+                endDate = new Date();
+                break;
+            case 'thismonth':
+                startDate = new Date();
+                startDate.setDate(1);
                 endDate = new Date();
                 break;
             default:
