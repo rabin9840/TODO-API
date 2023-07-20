@@ -7,29 +7,40 @@ const getAllTodos = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const status = req.query.status || "todo";
+        const dueDate = req.query.duedate;
+        const isActive = req.query.isActive;
+        const title = req.query.title;
 
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
         console.log("start index, limit, endindex, status " + startIndex, limit, endIndex, status);
 
-        const todos = await todoService.getAllTodos(startIndex, limit, status);
-        if (todos.length === 0) {
-            res.status(204).json({
-                status: "success",
-                statusCode: 204,
-                message: "No todo tasks found",
-                data: todos
-            })
-        }
-        else {
-            res.status(200).json({
-                status: "success",
-                statusCode: 200,
-                message: "Todo tasks retrieved successfully",
-                data: todos
-            }
-            );
-        }
+        const todos = await todoService.getAllTodos(startIndex, limit, status, page, dueDate, isActive, title);
+        // if (todos.length === 0) {
+        //     res.status(204).json({
+        //         status: "success",
+        //         statusCode: 204,
+        //         message: "No todo tasks found",
+        //         data: todos
+        //     })
+        // }
+        // else {
+        //     res.status(200).json({
+        //         status: "success",
+        //         statusCode: 200,
+        //         message: "Todo tasks retrieved successfully",
+        //         data: todos
+        //     }
+        //     );
+        // }
+        const statusCode = todos.length === 0 ? 204 : 200;
+        const message = todos.length === 0 ? "No todo tasks found" : "Todo tasks retrieved successfully";
+        res.status(statusCode).json({
+            status: "success",
+            statusCode,
+            message,
+            data: todos
+        });
 
     } catch (error) {
         next(error);
