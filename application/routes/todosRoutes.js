@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { validateTodo } = require('../middleware/validationMiddleware');
 const todoController = require('../controllers/todoController');
+const analyticsController = require('../controllers/analyticsController');
 const { authenticate } = require('../middleware/authenticationMiddleware');
 const { createTodoValidation } = require('../validation/todoValidation');
 const { updateTodoValidation } = require('../validation/todoUpdateValidation');
@@ -12,7 +13,7 @@ router.get('/', authenticate, todoController.getAllTodos);
 
 //GET /todosCount
 // router.get('/todosCount', authenticate, todoController.getTodosCount);
-router.get('/todosCount', authenticate, todoController.getTodosCount);
+router.get('/todosCount', authenticate, analyticsController.getTodosCount);
 
 router.get('/firstTenTodos', authenticate, todoController.getFirstTenTodos);
 

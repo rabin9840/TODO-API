@@ -210,19 +210,19 @@ const deleteTodo = async (req, res, next) => {
     }
 }
 
-const getTodosCount = async (req, res, next) => {
-    try {
-        const count = await todoService.getTodosCount();
-        res.status(200).json({
-            status: "success",
-            statusCode: 200,
-            message: "Todo tasks count retrieved successfully",
-            data: count
-        });
-    } catch (error) {
-        next(error);
-    }
-}
+// const getTodosCount = async (req, res, next) => {
+//     try {
+//         const count = await todoService.getTodosCount();
+//         res.status(200).json({
+//             status: "success",
+//             statusCode: 200,
+//             message: "Todo tasks count retrieved successfully",
+//             data: count
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// }
 
 const getFirstTenTodos = async (req, res, next) => {
     try {
@@ -271,7 +271,7 @@ module.exports = {
     createTodo: [createTodoValidation, createTodo],
     updateTodo,
     deleteTodo,
-    getTodosCount,
+    // getTodosCount,
     getFirstTenTodos,
     getFirstTenTodosDuration,
     getRecentTodos
