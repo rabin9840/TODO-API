@@ -21,6 +21,10 @@ router.get('/firstTenTodosDuration', authenticate, todoController.getFirstTenTod
 
 router.get('/recentTodos', authenticate, todoController.getRecentTodos);
 
+router.get('/todosCompletionTrend', authenticate, analyticsController.getTodosCompletionTrend);
+router.get('/dueDateRangeAnalysis', authenticate, analyticsController.getDueDateRangeAnalysis);
+
+router.get('/barData', authenticate, analyticsController.getTodoCountForDateRange);
 // POST /todos
 router.post('/', validateTodo(createTodoValidation), todoController.createTodo);
 // router.post('/', todoController.createTodo);

@@ -6,11 +6,14 @@ const todoRouter = require('./application/routes/todosRoutes');
 // const { validateTodo} = require('./application/middleware/validationMiddleware');
 const passport = require('passport');
 const cors = require('cors');
-
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // cors middleware for cross origin requests
@@ -20,6 +23,7 @@ const app = express();
 //     }
 // ));
 app.use(cors());
+
 
 //Connect to MongoDB
 connectDB();

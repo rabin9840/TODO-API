@@ -15,9 +15,7 @@ exports.updateTodoValidation = [
             }
             return true;
         }),
-
-
-    body('dueDate').trim().isDate().withMessage('Must be a valid date').custom((value) => {
+    body('dueDate').optional().trim().isDate().withMessage('Must be a valid date').custom((value) => {
         const selectedDate = moment(value, 'YYYY/MM/DD').toDate(); // Parse input date using moment and convert to Date
         const currentDate = new Date();
         const currentDateFormat = format(currentDate, 'yyyy-MM-dd');
