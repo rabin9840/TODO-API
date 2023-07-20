@@ -13,4 +13,15 @@ exports.updateTodoValidation = [
         }
         return true;
     }),
+
+    body('dueDate').trim().isDate().withMessage('Must be a valid date').custom((value) => {
+        const formats = ['YYYY/MM/DD', 'M/D/YYYY', 'YYYY-MM-DD'];
+        const selectedDate = parseISO(value);
+        const currentDate = new Date();
+        const correctedCurrentDate = moment(currentDate).format('YYYY-MM-DD');
+        if (selectedDate < correctedCurrentDate) {
+            throw new Error('Due date cannot be in the past');
+        }
+        return true;
+    }),
 ];
