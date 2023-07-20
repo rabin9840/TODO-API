@@ -3,8 +3,9 @@ const Todos = require('../models/todo');
 const moment = require('moment');
 const mongoose = require('mongoose');
 
-const getAllTodos = async (startIndex, limit, status) => {
-    let query = {};
+const getAllTodos = async (startIndex, limit, status, page, dueDate, isActive, title) => {
+    // let query = {};
+    const query = {};
 
     // const todos = await Todos.find({});
 
@@ -12,10 +13,23 @@ const getAllTodos = async (startIndex, limit, status) => {
     // const todos = await Todos.find({}).skip(startIndex).limit(limit);
 
     // apply status filter if status is available
-    if (status) {
-        query.status = status;
-    }
-    const todos = await Todos.find(query).skip(startIndex).limit(limit);
+    // if (status) {
+    //     query.status = status;
+    // }
+    // const todos = await Todos.find(query).skip(startIndex).limit(limit);
+    // return todos;
+    const options = {
+        page,
+        limit,
+        sort: { createdAt: -1 },
+    };
+
+    if (status) query.status = status;
+    if (dueDate) query.dueDate = dueDate;
+    if (title) query.title = { $regex: title, $options: "i" }
+    if (isActive) query.isActive = isActive === "true";
+    console.log(query);
+    const todos = await Todos.paginate(query, options);
     return todos;
 }
 

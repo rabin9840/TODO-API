@@ -7,12 +7,15 @@ const getAllTodos = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const status = req.query.status || "todo";
+        const dueDate = req.query.duedate;
+        const isActive = req.query.isActive;
+        const title = req.query.title;
 
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
         console.log("start index, limit, endindex, status " + startIndex, limit, endIndex, status);
 
-        const todos = await todoService.getAllTodos(startIndex, limit, status);
+        const todos = await todoService.getAllTodos(startIndex, limit, status, page, dueDate, isActive, title);
         if (todos.length === 0) {
             res.status(204).json({
                 status: "success",
