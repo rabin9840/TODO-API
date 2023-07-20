@@ -149,7 +149,7 @@ const getTodoCountForDateRange = async (startDate, endDate) => {
         const dateRangeTodoCount = await Todos.aggregate([
             {
                 $match: {
-                    dueDate: { $gte: mongoStartDate, $lt: mongoEndDate },
+                    createdAt: { $gte: mongoStartDate, $lt: mongoEndDate },
                 },
 
             },
