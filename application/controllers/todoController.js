@@ -65,6 +65,17 @@ const createTodo = async (req, res, next) => {
     // }
     try {
         const { title, description, dueDate, isActive, status } = req.body;
+        if (dueDate) {
+            const currentDate = new Date();
+            const selectedDate = new Date(dueDate);
+            if (selectedDate < currentDate) {
+                return res.status(400).json({
+                    status: "error",
+                    statusCode: 400,
+                    message: "Due date cannot be in the past"
+                })
+            }
+        }
         const newTodo = await todoService.createTodo(
             title,
             description,
