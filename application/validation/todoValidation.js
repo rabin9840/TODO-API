@@ -60,7 +60,8 @@
 // //       .withMessage('Invalid Date format. Expected format: YYYY-MM-DD'),
 // //   ];
 const { body } = require('express-validator');
-const Todo = require('../models/todo'); // Assuming the mongoose model for todos is named "Todo"
+const Todo = require('../models/todo');
+const { isValid, parseISO } = require('date-fns');
 
 exports.createTodoValidation = [
     body('title')
@@ -73,5 +74,12 @@ exports.createTodoValidation = [
             }
             return true;
         }),
-    body('dueDate').trim().isDate().withMessage('Must be a valid date'),
+    body('dueDate').trim().isDate().withMessage('Must be a valid date').custom((value) => {
+        const selectedDate = parseISO(value);
+        const currentDate = new Date();
+        if (selectedDate < currentDate) {
+            throw new Error('Due date cannot be in the past');
+        }
+        return true;
+    }),
 ];
