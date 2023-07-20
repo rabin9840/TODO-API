@@ -100,37 +100,74 @@ const getAllTodos = async (req, res, next) => {
 
 // }
 
+// const createTodo = async (req, res, next) => {
+//     try {
+//         const { title, description, dueDate, isActive, status } = req.body;
+
+//         // Use the validateDueDate middleware here
+//         validateDueDate(req, res, async function (err) {
+//             if (err) {
+//                 return next(err);
+//             }
+
+//             // Continue with creating newTodo
+//             const newTodo = await todoService.createTodo(
+//                 title,
+//                 description,
+//                 dueDate,
+//                 isActive,
+//                 status
+//             );
+
+//             res.status(201).json({
+//                 status: "success",
+//                 statusCode: 201,
+//                 message: "Todo task created successfully",
+//                 data: newTodo
+//             });
+//         });
+//     } catch (error) {
+//         next(error); // Pass the error to the error handler middleware
+//     }
+// };
+
 const createTodo = async (req, res, next) => {
+
     try {
         const { title, description, dueDate, isActive, status } = req.body;
-
-        // Use the validateDueDate middleware here
-        validateDueDate(req, res, async function (err) {
-            if (err) {
-                return next(err);
-            }
-
-            // Continue with creating newTodo
-            const newTodo = await todoService.createTodo(
-                title,
-                description,
-                dueDate,
-                isActive,
-                status
-            );
-
-            res.status(201).json({
-                status: "success",
-                statusCode: 201,
-                message: "Todo task created successfully",
-                data: newTodo
-            });
+        // if (dueDate) {
+        //     const currentDate = new Date();
+        //     const selectedDate = new Date(dueDate);
+        //     if (selectedDate < currentDate) {
+        //         return res.status(400).json({
+        //             status: "error",
+        //             statusCode: 400,
+        //             message: "Due date cannot be in the past"
+        //         })
+        //     }
+        // }
+        const newTodo = await todoService.createTodo(
+            title,
+            description,
+            dueDate,
+            isActive,
+            status
+        );
+        res.status(201).json({
+            status: "success",
+            statusCode: 201,
+            message: "Todo task created successfully",
+            data: newTodo
         });
-    } catch (error) {
-        next(error); // Pass the error to the error handler middleware
-    }
-};
 
+    }
+    catch (error) {
+        next(error); // Pass the error to the error handler middleware
+
+
+    }
+
+}
 
 const updateTodo = async (req, res, next) => {
     try {

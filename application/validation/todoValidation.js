@@ -61,7 +61,8 @@
 // //   ];
 const { body } = require('express-validator');
 const Todo = require('../models/todo');
-const { isValid, parseISO } = require('date-fns');
+const { parseISO } = require('date-fns');
+const moment = require('moment');
 
 exports.createTodoValidation = [
     body('title')
@@ -75,9 +76,19 @@ exports.createTodoValidation = [
             return true;
         }),
     body('dueDate').trim().isDate().withMessage('Must be a valid date').custom((value) => {
+        const formats = ['YYYY/MM/DD', 'M/D/YYYY', 'YYYY-MM-DD'];
         const selectedDate = parseISO(value);
         const currentDate = new Date();
-        if (selectedDate < currentDate) {
+        const correctedCurrentDate = moment(currentDate).format('YYYY-MM-DD');
+        console.log("correctedCurrentDate" + correctedCurrentDate);
+        console.log(selectedDate);
+        console.log(currentDate);
+
+        // error in timezone date
+        // if (selectedDate < currentDate) {
+        //     throw new Error('Due date cannot be in the past');
+        // }
+        if (selectedDate < correctedCurrentDate) {
             throw new Error('Due date cannot be in the past');
         }
         return true;
