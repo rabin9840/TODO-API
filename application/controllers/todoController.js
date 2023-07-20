@@ -2,6 +2,7 @@ const todoService = require('../services/todoServices');
 const { validationResult } = require('express-validator');
 const { createTodoValidation } = require('../validation/todoValidation');
 const errorHandler = require('../../errorHandler');
+const validateDueDate = require('../middleware/validateDueDate');
 const getAllTodos = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -47,57 +48,89 @@ const getAllTodos = async (req, res, next) => {
     }
 }
 
+// const createTodo = async (req, res, next) => {
+
+//     //check for validation errors
+//     // const errors = validationResult(req);
+//     // console.log(errors);
+//     // if (!errors.isEmpty()) {
+
+//     //     console.log(errors.array()[0].msg);
+//     //     return res.status(400).json({
+//     //         status: "error",
+//     //         statusCode: 400,
+//     //         // different way of error presenting
+//     //         errors:errors.array()
+
+//     //     })
+//     // }
+//     try {
+//         const { title, description, dueDate, isActive, status } = req.body;
+//         // if (dueDate) {
+//         //     const currentDate = new Date();
+//         //     const selectedDate = new Date(dueDate);
+//         //     if (selectedDate < currentDate) {
+//         //         return res.status(400).json({
+//         //             status: "error",
+//         //             statusCode: 400,
+//         //             message: "Due date cannot be in the past"
+//         //         })
+//         //     }
+//         // }
+//         const newTodo = await todoService.createTodo(
+//             title,
+//             description,
+//             dueDate,
+//             isActive,
+//             status
+//         );
+//         res.status(201).json({
+//             status: "success",
+//             statusCode: 201,
+//             message: "Todo task created successfully",
+//             data: newTodo
+//         });
+
+//     }
+//     catch (error) {
+//         next(error); // Pass the error to the error handler middleware
+
+
+//     }
+
+// }
+
 const createTodo = async (req, res, next) => {
-
-    //check for validation errors
-    // const errors = validationResult(req);
-    // console.log(errors);
-    // if (!errors.isEmpty()) {
-
-    //     console.log(errors.array()[0].msg);
-    //     return res.status(400).json({
-    //         status: "error",
-    //         statusCode: 400,
-    //         // different way of error presenting
-    //         errors:errors.array()
-
-    //     })
-    // }
     try {
         const { title, description, dueDate, isActive, status } = req.body;
-        if (dueDate) {
-            const currentDate = new Date();
-            const selectedDate = new Date(dueDate);
-            if (selectedDate < currentDate) {
-                return res.status(400).json({
-                    status: "error",
-                    statusCode: 400,
-                    message: "Due date cannot be in the past"
-                })
+
+        // Use the validateDueDate middleware here
+        validateDueDate(req, res, async function (err) {
+            if (err) {
+                return next(err);
             }
-        }
-        const newTodo = await todoService.createTodo(
-            title,
-            description,
-            dueDate,
-            isActive,
-            status
-        );
-        res.status(201).json({
-            status: "success",
-            statusCode: 201,
-            message: "Todo task created successfully",
-            data: newTodo
+
+            // Continue with creating newTodo
+            const newTodo = await todoService.createTodo(
+                title,
+                description,
+                dueDate,
+                isActive,
+                status
+            );
+
+            res.status(201).json({
+                status: "success",
+                statusCode: 201,
+                message: "Todo task created successfully",
+                data: newTodo
+            });
         });
-
-    }
-    catch (error) {
+    } catch (error) {
         next(error); // Pass the error to the error handler middleware
-
-
     }
+};
 
-}
 
 const updateTodo = async (req, res, next) => {
     try {
