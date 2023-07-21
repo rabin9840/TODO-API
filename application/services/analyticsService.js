@@ -146,28 +146,64 @@ const getTodoCountForDateRange = async (startDate, endDate) => {
     // Convert startDate and endDate to MongoDB Date objects
     try {
 
+        // const dateRangeTodoCount = await Todos.aggregate([
+        //     {
+        //         $match: {
+        //             createdAt: { $gte: mongoStartDate, $lt: mongoEndDate },
+        //         },
+
+        //     },
+        //     {
+        //         $group: {
+        //             _id: '$status',
+        //             count: { $sum: 1 },
+        //         },
+        //     },
+        //     {
+        //         $project: {
+        //             _id: 0,
+        //             status: '$_id',
+        //             count: 1,
+        //         },
+        //     },
+
+        // ])
+
         const dateRangeTodoCount = await Todos.aggregate([
             {
                 $match: {
                     createdAt: { $gte: mongoStartDate, $lt: mongoEndDate },
                 },
-
             },
             {
                 $group: {
-                    _id: '$status',
+                    _id: {
+                        date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                        status: "$status",
+                    },
                     count: { $sum: 1 },
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id.date",
+                    statusCounts: {
+                        $push: {
+                            status: "$_id.status",
+                            count: "$count",
+                        },
+                    },
                 },
             },
             {
                 $project: {
                     _id: 0,
-                    status: '$_id',
-                    count: 1,
+                    date: "$_id",
+                    statusCounts: 1,
                 },
             },
+        ]);
 
-        ])
         console.log(dateRangeTodoCount);
         return dateRangeTodoCount;
 
