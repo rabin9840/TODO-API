@@ -7,8 +7,9 @@ const getAllTodos = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const status = req.query.status || "todo";
-        const dueDate = req.query.duedate;
+        const status = req.query.status;
+        const dueDate = req.query.dueDate;
+
         const isActive = req.query.isActive;
         const title = req.query.title;
 
