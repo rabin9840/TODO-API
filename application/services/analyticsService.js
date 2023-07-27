@@ -137,38 +137,76 @@ const getTodoCountForDateRange = async (startDate, endDate) => {
     // const startDate = new Date(Date.parse(startDateString));
     // const endDate = new Date(Date.parse(endDateString));
 
-    const mongoStartDate = new Date(Date.parse(startDate));
+    // const mongoStartDate = new Date(Date.parse(startDate));
+    const startDateObj = new Date(startDate + "T00:00:00");
     const mongoEndDate = new Date(Date.parse(endDate));
 
-    console.log('gte' + mongoStartDate);
+    // console.log('gte' + mongoStartDate);
+    console.log('gte' + startDateObj);
     console.log('lt' + mongoEndDate);
 
     // Convert startDate and endDate to MongoDB Date objects
     try {
 
+        // const dateRangeTodoCount = await Todos.aggregate([
+        //     {
+        //         $match: {
+        //             createdAt: { $gte: mongoStartDate, $lt: mongoEndDate },
+        //         },
+
+        //     },
+        //     {
+        //         $group: {
+        //             _id: '$status',
+        //             count: { $sum: 1 },
+        //         },
+        //     },
+        //     {
+        //         $project: {
+        //             _id: 0,
+        //             status: '$_id',
+        //             count: 1,
+        //         },
+        //     },
+
+        // ])
+
         const dateRangeTodoCount = await Todos.aggregate([
             {
                 $match: {
-                    dueDate: { $gte: mongoStartDate, $lt: mongoEndDate },
+                    createdAt: { $gte: startDateObj, $lt: mongoEndDate },
                 },
-
             },
             {
                 $group: {
-                    _id: '$status',
+                    _id: {
+                        date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                        status: "$status",
+                    },
                     count: { $sum: 1 },
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id.date",
+                    statusCounts: {
+                        $push: {
+                            status: "$_id.status",
+                            count: "$count",
+                        },
+                    },
                 },
             },
             {
                 $project: {
                     _id: 0,
-                    status: '$_id',
-                    count: 1,
+                    date: "$_id",
+                    statusCounts: 1,
                 },
             },
+        ]);
 
-        ])
-        console.log(dateRangeTodoCount);
+        console.log("DATTERANGECONT" + dateRangeTodoCount);
         return dateRangeTodoCount;
 
     }

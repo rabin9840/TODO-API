@@ -81,14 +81,15 @@ exports.createTodoValidation = [
         const currentDate = new Date();
         const correctedCurrentDate = moment(currentDate).format('YYYY-MM-DD');
         console.log("correctedCurrentDate" + correctedCurrentDate);
-        console.log(selectedDate);
-        console.log(currentDate);
+        console.log("selected date" + selectedDate);
+        console.log("current date" + currentDate);
+        console.log("comparison value" + selectedDate < correctedCurrentDate);
 
         // error in timezone date
         // if (selectedDate < currentDate) {
         //     throw new Error('Due date cannot be in the past');
         // }
-        if (selectedDate < correctedCurrentDate) {
+        if (selectedDate < new Date(correctedCurrentDate)) {
             throw new Error('Due date cannot be in the past');
         }
         return true;

@@ -24,7 +24,10 @@ const getAllTodos = async (startIndex, limit, status, page, dueDate, isActive, t
         sort: { createdAt: -1 },
     };
 
-    if (status) query.status = status;
+    if (status && status !== "All") { // Check if status is provided and not "All"
+        query.status = status;
+    }
+    console.log("duedate" + dueDate);
     if (dueDate) query.dueDate = dueDate;
     if (title) query.title = { $regex: title, $options: "i" }
     if (isActive) query.isActive = isActive === "true";
