@@ -9,8 +9,10 @@ exports.updateTodoValidation = [
         .notEmpty().withMessage('Title cannot be an empty string')
         .custom(async (value) => {
             // Check if a todo with the same title already exists
+            console.log(value);
             const existingTodo = await Todo.findOne({ title: value });
             if (existingTodo) {
+                console.log("existing todo foung");
                 throw new Error('A todo with this title already exists');
             }
             return true;

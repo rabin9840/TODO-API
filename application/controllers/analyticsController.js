@@ -94,6 +94,7 @@ const getTodoCountForDateRange = async (req, res, next) => {
 
         const count = await analyticsService.getTodoCountForDateRange(startDate, endDate);
         console.log(count);
+        console.log("iinside controller" + count);
         res.status(200).json({
             status: "success",
             statusCode: 200,

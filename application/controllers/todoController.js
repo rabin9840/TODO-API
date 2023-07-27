@@ -4,6 +4,7 @@ const { createTodoValidation } = require('../validation/todoValidation');
 const errorHandler = require('../../errorHandler');
 const validateDueDate = require('../middleware/validateDueDate');
 const getAllTodos = async (req, res, next) => {
+    console.log("callingGetALLtoDOS");
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
