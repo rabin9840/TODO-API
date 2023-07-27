@@ -137,12 +137,10 @@ const getTodoCountForDateRange = async (startDate, endDate) => {
     // const startDate = new Date(Date.parse(startDateString));
     // const endDate = new Date(Date.parse(endDateString));
 
-    // const mongoStartDate = new Date(Date.parse(startDate));
-    const startDateObj = new Date(startDate + "T00:00:00");
+    const mongoStartDate = new Date(Date.parse(startDate));
     const mongoEndDate = new Date(Date.parse(endDate));
 
-    // console.log('gte' + mongoStartDate);
-    console.log('gte' + startDateObj);
+    console.log('gte' + mongoStartDate);
     console.log('lt' + mongoEndDate);
 
     // Convert startDate and endDate to MongoDB Date objects
@@ -174,7 +172,7 @@ const getTodoCountForDateRange = async (startDate, endDate) => {
         const dateRangeTodoCount = await Todos.aggregate([
             {
                 $match: {
-                    createdAt: { $gte: startDateObj, $lt: mongoEndDate },
+                    createdAt: { $gte: mongoStartDate, $lt: mongoEndDate },
                 },
             },
             {
@@ -206,7 +204,7 @@ const getTodoCountForDateRange = async (startDate, endDate) => {
             },
         ]);
 
-        console.log("DATTERANGECONT" + dateRangeTodoCount);
+        console.log(dateRangeTodoCount);
         return dateRangeTodoCount;
 
     }
