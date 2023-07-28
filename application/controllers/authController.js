@@ -16,16 +16,42 @@ const signup = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+}
 
+const login = (req, res, next) => {
+    try {
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            message: "User logged in successfully",
+            data: req.user
+        });
+
+
+    }
+    catch (error) {
+        next(error);
+    }
 }
 
 const logout = (req, res) => {
-    req.logout(); // Passport function to destroy the session and log the user out
-    // res.redirect('/api/login');
-    res.send("logged out");
+    // req.session.destroy();
+    req.logout((err) => {
+        if (err) {
+            // Handle any errors that occur during logout
+            console.error('Error during logout:', err);
+            res.status(500).json({ message: 'Error during logout' });
+        } else {
+            // Successful logout, perform any additional actions
+            // For example, redirect the user to the login page or respond with a success message
+            res.send('Logged out successfully');
+        }
+    }); // Passport function to destroy the session and log the user out
+
 };
 
 module.exports = {
     signup,
+    login,
     logout
 }
