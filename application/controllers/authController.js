@@ -1,6 +1,4 @@
-const userService = require('../services/userServices');
-const { validationResult } = require('express-validator');
-const { createTodoValidation } = require('../validation/todoValidation');
+const userService = require('../services/userService');
 const errorHandler = require('../../errorHandler');
 
 const signup = async (req, res, next) => {
@@ -19,4 +17,15 @@ const signup = async (req, res, next) => {
         next(error);
     }
 
+}
+
+const logout = (req, res) => {
+    req.logout(); // Passport function to destroy the session and log the user out
+    // res.redirect('/api/login');
+    res.send("logged out");
+};
+
+module.exports = {
+    signup,
+    logout
 }

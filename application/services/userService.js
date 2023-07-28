@@ -4,6 +4,11 @@ const bcrypt = require('bcrypt');
 
 const createUser = async (username, email, password) => {
     try {
+        // const existingId = await Users.findById(_id);
+        // if (existingId) {
+        //     throw new Error('User id already exists');
+        // }
+
         const existingUser = await Users.findOne({ username });
         if (existingUser) {
             throw new Error('User already exists');
@@ -17,6 +22,7 @@ const createUser = async (username, email, password) => {
 
         const hahsedPassword = await bcrypt.hash(password, 10);
         const newUser = new Users({
+            // _id,
             username,
             email,
             password: hahsedPassword
@@ -32,6 +38,6 @@ const createUser = async (username, email, password) => {
 
 }
 
-module.export = {
+module.exports = {
     createUser
 }

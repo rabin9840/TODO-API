@@ -3,10 +3,12 @@ const dotenv = require('dotenv');
 const errorHandler = require('./errorHandler');
 const connectDB = require('./application/config/db');
 const todoRouter = require('./application/routes/todosRoutes');
+const authRoutes = require('./application/routes/authRoutes');
 // const { validateTodo} = require('./application/middleware/validationMiddleware');
 const passport = require('passport');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 dotenv.config();
 
@@ -42,10 +44,18 @@ app.use(express.json());
 
 // app.use(validateTodo);
 
-app.use(passport.initialize());
+app.use(session({
+    secret: 'mySecretKey', // Replace with a strong secret for session encryption
+    resave: false,
+    saveUninitialized: false,
+}));
 
+app.use(passport.initialize());
+app.use(passport.session());
 //  Import routes
 app.use('/todos', todoRouter);
+app.use('/api', authRoutes);
+
 app.use(errorHandler);
 
 const port = process.env.PORT || 3000;
