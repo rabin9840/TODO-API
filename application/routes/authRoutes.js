@@ -3,7 +3,8 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const passport = require('passport');
 const { isAuthenticated } = require('../middleware/sessionAuthenticationMiddleware');
-const { localAuthMiddleware } = require('../middleware/newAuthenticationMiddleware');
+const localAuthMiddleware = require('../middleware/newAuthenticationMiddleware');
+// const { localAuthMiddleware } = require('../middleware/newAuthenticationMiddleware');
 
 router.post('/signup', authController.signup);
 // router.post('/login', localAuthMiddleware, authController.login);

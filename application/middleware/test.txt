@@ -1,44 +1,26 @@
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/authController');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
-const User = require('../models/users');
+const { isAuthenticated } = require('../middleware/sessionAuthenticationMiddleware');
+const { localAuthMiddleware } = require('../middleware/newAuthenticationMiddleware');
 
-passport.use(
-    new LocalStrategy(async (username, password, done) => {
-        try {
-            console.log(username);
-            console.log(password);
-            const user = await User.findOne({ username });
-            console.log(user);
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username or password' });
-            }
-            const userResult = await bcrypt.compare(password, user.password);
-            if (!userResult) {
-                return done(null, false, { message: 'Incorrect email or password' });
-            }
-
-            return done(null, user);
-        } catch (error) {
-            return done(error);
-        }
-
-    })
-);
+router.post('/signup', authController.signup);
+// router.post('/login', localAuthMiddleware, authController.login);
+// router.post('/login', localAuthMiddleware, authController.login);
+router.post('/login',passport.authenticate('local',{session:true}))
 
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
+
+router.get('/todo', isAuthenticated, (req, res) => {
+    // User is authenticated, return the TODO list or any other protected data
+    res.json({
+        todos: ['Task 1', 'Task 2', 'Task 3'],
+        userEmail: req.user.email
+    });
 });
-
-passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await User.findById(id);
-        done(null, user);
-    } catch (error) {
-        done(error);
-    }
-});
+router.get('/logout', authController.logout);
 
 
-exports.localAuthMiddleware = passport.authenticate('local', { session: true });
+
+module.exports = router;
