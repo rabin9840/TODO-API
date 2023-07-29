@@ -1,6 +1,7 @@
 const Users = require('../models/users');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const { UserExistsError, EmailExistsError } = require('../errors');
 
 const createUser = async (username, email, password) => {
 
@@ -13,12 +14,12 @@ const createUser = async (username, email, password) => {
     console.log(username, email, password);
     const existingUser = await Users.findOne({ username });
     if (existingUser) {
-        throw new Error('User already exists');
+        throw new UserExistsError('Username already exists');
     }
 
     const existingEmail = await Users.findOne({ email });
     if (existingEmail) {
-        throw new Error('Email already exists');
+        throw new EmailExistsError('Email already exists');
     }
 
 

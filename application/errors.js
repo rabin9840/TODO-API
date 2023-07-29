@@ -1,16 +1,16 @@
-function UserExistError(message) {
+function UserExistsError(message) {
     const error = new Error(message);
-    error.name = 'UserExistError';
+    error.name = 'UserExistsError';
     return error;
 }
 
-function EmailExistError(message) {
+function EmailExistsError(message) {
     const error = new Error(message);
-    error.name = 'EmailExistError';
+    error.name = 'EmailExistsError';
     return error;
 }
 
 module.exports = {
-    UserExistError,
-    EmailExistError
-}
+    UserExistsError,
+    EmailExistsError,
+};

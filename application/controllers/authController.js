@@ -1,5 +1,6 @@
 const userService = require('../services/userService');
 const errorHandler = require('../../errorHandler');
+const { UserExistsError, EmailExistsError } = require('../errors');
 
 const signup = async (req, res, next) => {
     try {
@@ -15,12 +16,27 @@ const signup = async (req, res, next) => {
 
 
     } catch (error) {
-        res.status(400).json({
-            status: 'error',
-            statusCode: 400,
-            message: error.message, // Use the error message from the thrown error
-        });
-        // next(error);
+        // if (error instanceof UserExistError || error instanceof EmailExistError) {
+        //     console.log("inside if of error handler in authcontroller");
+        //     // Handle user or email already exists error
+        //     return res.status(409).json({
+        //         status: 'error',
+        //         statusCode: 409,
+        //         message: error.message,
+        //     });
+        // }
+        console.log("inside eror of auth controller");
+        if (error.name === 'UserExistsError' || error.name === 'EmailExistsError') {
+            // Handle user or email already exists error
+            return res.status(409).json({
+                status: 'error',
+                statusCode: 409,
+                message: error.message,
+
+            });
+        }
+
+        next(error);
     }
 }
 
