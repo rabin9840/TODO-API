@@ -51,7 +51,11 @@ const localAuthMiddleware = (req, res, next) => {
         }
         if (!user) {
             console.log("Inside user error");
-            return res.status(401).json({ message: info.message });
+            return res.status(401).json({
+                status: "error",
+                statusCode: 401,
+                message: info.message
+            });
         }
         req.user = user;
         next();

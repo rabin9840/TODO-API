@@ -4,6 +4,7 @@ const errorHandler = require('../../errorHandler');
 const signup = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
+        console.log("username,email,password" + username, email, password);
         const newUser = await userService.createUser(username, email, password);
         res.status(201).json({
             status: "success",
@@ -14,7 +15,12 @@ const signup = async (req, res, next) => {
 
 
     } catch (error) {
-        next(error);
+        res.status(400).json({
+            status: 'error',
+            statusCode: 400,
+            message: error.message, // Use the error message from the thrown error
+        });
+        // next(error);
     }
 }
 
