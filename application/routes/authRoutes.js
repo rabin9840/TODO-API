@@ -13,6 +13,7 @@ router.post('/login', localAuthMiddleware, authController.login);
 
 router.get('/todo', isAuthenticated, (req, res) => {
     // User is authenticated, return the TODO list or any other protected data
+    console.log("is authenticated in router");
     res.json({
         todos: ['Task 1', 'Task 2', 'Task 3'],
         userEmail: req.user.email

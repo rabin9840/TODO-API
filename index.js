@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //         origin: 'http://127.0.0.1:5173'
 //     }
 // ));
-app.use(cors());
+
 
 
 //Connect to MongoDB
@@ -59,12 +59,27 @@ app.use(session({
         autoRemove: 'interval',
         autoRemoveInterval: 10
     }),
-    cookie: {
-        maxAge: 1 * 24 * 60 * 60 * 1000, // Set the session to expire in 30 days (adjust as needed)
-    },
+    // cookie: {
+    //     maxAge: 2 * 24 * 60 * 60 * 1000, // Set the session to expire in 30 days (adjust as needed)
+    //     sameSite: 'none',
+    //     secure: true,
+
+
+
+    // },
 }));
+// app.use(cors({
+//     origin: 'http://127.0.0.1:5173',
+//     credentials: true,
+// }));
+
+app.use('*', cors({
+    origin: true,
+    credentials: true,
+}))
 app.use(passport.initialize());
 app.use(passport.session());
+
 //  Import routes
 app.use('/todos', todoRouter);
 app.use('/api', authRoutes);
