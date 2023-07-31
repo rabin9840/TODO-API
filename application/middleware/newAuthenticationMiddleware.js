@@ -29,11 +29,13 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, passwor
 
 
 passport.serializeUser((user, done) => {
+    console.log("inside serializeeuser");
     done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
     try {
+        console.log("inside try of deserializeUser");
         const user = await User.findById(id);
         done(null, user);
     } catch (error) {
@@ -43,10 +45,33 @@ passport.deserializeUser(async (id, done) => {
 
 
 // exports.localAuthMiddleware = passport.authenticate('local', { session: true });
+// const localAuthMiddleware = (req, res, next) => {
+//     passport.authenticate('local', { session: true }, (err, user, info) => {
+//         console.log("Inside localAuthMiddleware");
+//         if (err) {
+//             console.error(err);
+//             return next(err);
+//         }
+//         if (!user) {
+//             console.log("Inside user error");
+//             return res.status(401).json({
+//                 status: "error",
+//                 statusCode: 401,
+//                 message: info.message
+//             });
+//         }
+//         req.user = user;
+//         console.log("User authenticated:", user);
+//         next();
+//     })(req, res, next);
+// };
+
+// newAuthenticationMiddleware.js
+
 const localAuthMiddleware = (req, res, next) => {
     passport.authenticate('local', { session: true }, (err, user, info) => {
         if (err) {
-            console.log(err);
+            console.error(err);
             return next(err);
         }
         if (!user) {
@@ -57,9 +82,17 @@ const localAuthMiddleware = (req, res, next) => {
                 message: info.message
             });
         }
-        req.user = user;
-        next();
+        // If authentication is successful, call req.login() to establish a session
+        req.login(user, (err) => {
+            if (err) {
+                console.error("Error during req.login:", err);
+                return next(err);
+            }
+            console.log("User authenticated:", user);
+            next();
+        });
     })(req, res, next);
-}
+};
 
 module.exports = localAuthMiddleware;
+
