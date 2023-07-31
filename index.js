@@ -77,6 +77,9 @@ app.use('*', cors({
     origin: true,
     credentials: true,
 }))
+
+
+// app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 
