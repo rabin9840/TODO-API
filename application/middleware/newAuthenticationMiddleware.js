@@ -83,12 +83,14 @@ const localAuthMiddleware = (req, res, next) => {
             });
         }
         // If authentication is successful, call req.login() to establish a session
+        console.log("Inside localauthmiddleware" + user);
         req.login(user, (err) => {
             if (err) {
                 console.error("Error during req.login:", err);
                 return next(err);
             }
             console.log("User authenticated:", user);
+            // req.session.username = user.username;
             next();
         });
     })(req, res, next);

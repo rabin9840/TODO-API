@@ -46,7 +46,7 @@ const login = (req, res, next) => {
             status: "success",
             statusCode: 200,
             message: "User logged in successfully",
-            data: req.user
+            data: req.user,
         });
 
 
