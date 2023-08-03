@@ -66,10 +66,35 @@ const logout = (req, res) => {
         } else {
             // Successful logout, perform any additional actions
             // For example, redirect the user to the login page or respond with a success message
+            req.session.destroy();
+            res.clearCookie('connect.sid');
             res.status(200).json({ message: 'Logged out successfully' });
         }
     }); // Passport function to destroy the session and log the user out
 
+    // req.logout((err) => {
+    //     if (err) {
+    //         // Handle any errors that occur during logout
+    //         console.error('Error during logout:', err);
+    //         res.status(500).json({ message: 'Error during logout' });
+    //     } else {
+    //         // Successful logout, perform any additional actions
+    //         // For example, redirect the user to the login page or respond with a success message
+
+    //         // Remove the session from the database using the session ID
+    //         req.sessionStore.destroy(req.sessionID, (destroyErr) => {
+    //             if (destroyErr) {
+    //                 console.error('Error removing session from database:', destroyErr);
+    //             } else {
+    //                 console.log('Session removed from database');
+    //             }
+
+    //             // Clear the connect.sid cookie from the client-side
+    //             res.clearCookie('connect.sid');
+    //             res.status(200).json({ message: 'Logged out successfully' });
+    //         });
+    //     }
+    // });
 };
 
 module.exports = {
