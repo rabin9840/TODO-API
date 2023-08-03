@@ -5,6 +5,7 @@ const errorHandler = require('../../errorHandler');
 const validateDueDate = require('../middleware/validateDueDate');
 const getAllTodos = async (req, res, next) => {
     console.log("callingGetALLtoDOS");
+    console.log(req.session.passport);
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -17,9 +18,10 @@ const getAllTodos = async (req, res, next) => {
 
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        console.log("start index, limit, endindex, status " + startIndex, limit, endIndex, status);
+        const userId = req.session.passport.user;
+        console.log("start index, limit, endindex, status user " + startIndex, limit, endIndex, status, userId);
 
-        const todos = await todoService.getAllTodos(startIndex, limit, status, page, dueDate, isActive, title);
+        const todos = await todoService.getAllTodos(startIndex, limit, status, page, dueDate, isActive, title, userId);
         // if (todos.length === 0) {
         //     res.status(204).json({
         //         status: "success",
@@ -138,6 +140,7 @@ const createTodo = async (req, res, next) => {
 
     try {
         const { title, description, dueDate, isActive, status } = req.body;
+        console.log("inside controller");
         // if (dueDate) {
         //     const currentDate = new Date();
         //     const selectedDate = new Date(dueDate);
@@ -149,12 +152,15 @@ const createTodo = async (req, res, next) => {
         //         })
         //     }
         // }
+        console.log(req.session.passport.user);
+        const createdBy = req.session.passport.user;
         const newTodo = await todoService.createTodo(
             title,
             description,
             dueDate,
             isActive,
-            status
+            status,
+            createdBy
         );
         res.status(201).json({
             status: "success",

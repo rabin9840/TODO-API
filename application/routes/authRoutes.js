@@ -6,6 +6,7 @@ const { isAuthenticated } = require('../middleware/sessionAuthenticationMiddlewa
 const localAuthMiddleware = require('../middleware/newAuthenticationMiddleware');
 // const { localAuthMiddleware } = require('../middleware/newAuthenticationMiddleware');
 
+
 router.post('/signup', authController.signup);
 // router.post('/login', localAuthMiddleware, authController.login);
 router.post('/login', localAuthMiddleware, authController.login);
@@ -15,6 +16,7 @@ router.get('/todo', isAuthenticated, (req, res) => {
     // User is authenticated, return the TODO list or any other protected data
     console.log("is authenticated in router");
     res.json({
+        fromRequest: req.session.passport.user,
         todos: ['Task 1', 'Task 2', 'Task 3'],
         userEmail: req.user.email
     });

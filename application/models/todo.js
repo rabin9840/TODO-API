@@ -6,7 +6,8 @@ const todoSchema = new mongoose.Schema({
     description: { type: String, required: true },
     dueDate: { type: Date, required: true },
     isActive: { type: Boolean, required: true, default: true },
-    status: { type: String, enum: ['todo', 'ongoing', 'completed'], default: 'todo' }
+    status: { type: String, enum: ['todo', 'ongoing', 'completed'], default: 'todo' },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 },
     { timestamps: true }
 );
