@@ -6,6 +6,7 @@ const analyticsController = require('../controllers/analyticsController');
 const { authenticate } = require('../middleware/authenticationMiddleware');
 const { createTodoValidation } = require('../validation/todoValidation');
 const { updateTodoValidation } = require('../validation/todoUpdateValidation');
+const { authenticateUser } = require("../middleware/authenticateUser");
 
 // GET /todos
 router.get('/', authenticate, todoController.getAllTodos);
@@ -26,7 +27,7 @@ router.get('/dueDateRangeAnalysis', authenticate, analyticsController.getDueDate
 
 router.get('/barData', authenticate, analyticsController.getTodoCountForDateRange);
 // POST /todos
-router.post('/', validateTodo(createTodoValidation), todoController.createTodo);
+router.post('/', validateTodo(createTodoValidation), authenticateUser, todoController.createTodo);
 // router.post('/', todoController.createTodo);
 
 // PUT /todos/:id   

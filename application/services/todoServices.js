@@ -36,7 +36,7 @@ const getAllTodos = async (startIndex, limit, status, page, dueDate, isActive, t
     return todos;
 }
 
-const createTodo = async (title, description, dueDate, isActive, status) => {
+const createTodo = async (title, description, dueDate, isActive, status, createdBy) => {
     const formats = ['YYYY/MM/DD', 'M/D/YYYY', 'YYYY-MM-DD'];
     // const isoDate = moment(dueDate, 'M/D/YYYY').format('YYYY-MM-DD');
     // const momentDate = moment(isoDate).format('YYYY-MM-DD');
@@ -48,7 +48,8 @@ const createTodo = async (title, description, dueDate, isActive, status) => {
         description,
         dueDate: momentDate,
         isActive,
-        status
+        status,
+        createdBy
     });
     await newTodo.save();
     return newTodo;

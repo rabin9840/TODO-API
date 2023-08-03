@@ -14,4 +14,4 @@ const authenticateUser = (req, res, next) => {
     }
 }
 
-export default authenticateUser;
+module.exports = authenticateUser;

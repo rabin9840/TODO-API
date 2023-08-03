@@ -149,13 +149,15 @@ const createTodo = async (req, res, next) => {
         //         })
         //     }
         // }
-        console.log(req.user._id);
+        console.log(req.session.userId);
+        const createdBy = req.session.userId;
         const newTodo = await todoService.createTodo(
             title,
             description,
             dueDate,
             isActive,
-            status
+            status,
+            createdBy
         );
         res.status(201).json({
             status: "success",
