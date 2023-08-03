@@ -6,6 +6,7 @@ const { isAuthenticated } = require('../middleware/sessionAuthenticationMiddlewa
 const localAuthMiddleware = require('../middleware/newAuthenticationMiddleware');
 // const { localAuthMiddleware } = require('../middleware/newAuthenticationMiddleware');
 
+
 router.post('/signup', authController.signup);
 // router.post('/login', localAuthMiddleware, authController.login);
 router.post('/login', localAuthMiddleware, authController.login);
