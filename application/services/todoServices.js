@@ -3,9 +3,11 @@ const Todos = require('../models/todo');
 const moment = require('moment');
 const mongoose = require('mongoose');
 
-const getAllTodos = async (startIndex, limit, status, page, dueDate, isActive, title) => {
+const getAllTodos = async (startIndex, limit, status, page, dueDate, isActive, title, userId) => {
     // let query = {};
-    const query = {};
+    const query = {
+        createdBy: userId,
+    };
 
     // const todos = await Todos.find({});
 
@@ -31,8 +33,11 @@ const getAllTodos = async (startIndex, limit, status, page, dueDate, isActive, t
     if (dueDate) query.dueDate = dueDate;
     if (title) query.title = { $regex: title, $options: "i" }
     if (isActive) query.isActive = isActive === "true";
+
+
     console.log(query);
     const todos = await Todos.paginate(query, options);
+    console.log("todos in service file" + todos);
     return todos;
 }
 

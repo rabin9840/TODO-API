@@ -1,7 +1,6 @@
 const authenticateUser = (req, res, next) => {
-    console.log("Inside authenticateUser middleware" + req.session);
-    console.log("Inside authenticateUser middleware" + req.session.userId);
-    if (req.session && req.session.userId) {
+    console.log("Inside authenticateUser middleware" + req.session.passport.user);
+    if (req.session && req.session.passport.user) {
         next();
     }
     else {
