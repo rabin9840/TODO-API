@@ -149,6 +149,7 @@ const createTodo = async (req, res, next) => {
         //         })
         //     }
         // }
+        console.log(req.user._id);
         const newTodo = await todoService.createTodo(
             title,
             description,
