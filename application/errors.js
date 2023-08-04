@@ -9,8 +9,14 @@ function EmailExistsError(message) {
     error.name = 'EmailExistsError';
     return error;
 }
+function UnauthorizedOperationError(message) {
+    const error = new Error(message);
+    error.name = 'UnauthorizedError';
+    return error;
+}
 
 module.exports = {
     UserExistsError,
     EmailExistsError,
+    UnauthorizedOperationError,
 };

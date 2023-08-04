@@ -37,6 +37,10 @@ router.post('/', authenticateUser, validateTodo(createTodoValidation), todoContr
 router.put('/:id', authenticate, validateTodo(updateTodoValidation), todoController.updateTodo);
 
 // DELETE /todos/:id
-router.delete('/:id', authenticate, todoController.deleteTodo);
+// For basic authentication
+// router.delete('/:id', authenticate, todoController.deleteTodo);
+
+// For session based 
+router.delete('/:id', authenticateUser, todoController.deleteTodo);
 
 module.exports = router;

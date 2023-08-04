@@ -2,12 +2,13 @@
 const Todos = require('../models/todo');
 const moment = require('moment');
 const mongoose = require('mongoose');
+const { UnauthorizedOperationError } = require('../errors');
 
-const getAllTodos = async (startIndex, limit, status, page, dueDate, isActive, title, userId) => {
-    // let query = {};
-    const query = {
-        createdBy: userId,
-    };
+const getAllTodos = async (startIndex, limit, status, page, dueDate, isActive, title) => {
+    let query = {};
+    // const query = {
+    //     createdBy: userId,
+    // };
 
     // const todos = await Todos.find({});
 
@@ -91,20 +92,29 @@ const updateTodo = async (id, title, description, dueDate, isActive, status) => 
 
 }
 
-const deleteTodo = async (id) => {
+const deleteTodo = async (id, userId) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         const error = new Error('Invalid ID');
         error.statusCode = 400; // Set the desired status code
         throw error;
     }
 
-    try {
-        await Todos.findByIdAndDelete(id);
-    } catch (error) {
-        const customError = new Error('An error occurred while deleting the todo task');
-        customError.statusCode = 500; // Set the desired status code
-        throw customError;
+    const todo = await Todos.findById(id);
+    console.log(todo);
+
+    if (!todo) {
+        const error = new Error("No todos found");
+        error.statusCode = 404;
+        throw error;
     }
+    console.log(todo.createdBy);
+    console.log("delte verification" + todo.createdBy != userId);
+    if (todo.createdBy != userId) {
+        console.log("inside if of delete todo for unauthorized error");
+        throw new UnauthorizedOperationError('You are not authorized to delete this todo');
+    }
+    await Todos.findByIdAndDelete(id);
+
 }
 
 // Aggregate usage to group and return the count of todos according to status
