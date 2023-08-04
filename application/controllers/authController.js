@@ -66,10 +66,11 @@ const logout = (req, res) => {
         } else {
             // Successful logout, perform any additional actions
             // For example, redirect the user to the login page or respond with a success message
-            res.send('Logged out successfully');
+            req.session.destroy();
+            res.clearCookie('connect.sid');
+            res.status(200).json({ message: 'Logged out successfully' });
         }
     }); // Passport function to destroy the session and log the user out
-
 };
 
 module.exports = {
