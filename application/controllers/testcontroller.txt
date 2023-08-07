@@ -1,10 +1,9 @@
 const todoService = require('../services/todoServices');
 const { validationResult } = require('express-validator');
 const { createTodoValidation } = require('../validation/todoValidation');
-const errorHandler = require('../../errorHandler');
-const getAllTodos = async (req, res, next) => {
+const errorHandler= require('../../errorHandler');
+const getAllTodos = async (req, res) => {
     try {
-
         const todos = await todoService.getAllTodos();
         if (todos.length === 0) {
             res.status(204).json({
@@ -21,15 +20,29 @@ const getAllTodos = async (req, res, next) => {
                 message: "Todo tasks retrieved successfully",
                 data: todos
             }
-            );
+            );    
         }
-
+        
     } catch (error) {
+        // res.status(500).json({
+        //     status: "error",
+        //     statusCode: 500,
+        //     message: "An error occured while retrieving todo tasks",
+        //     errors: [
+        //         {
+        //             msg: error.message,
+        //             name: error.name,
+        //             value: error.value,
+        //         }
+                
+        //     ]
+        // });
         next(error);
+        
     }
 }
 
-const createTodo = async (req, res, next) => {
+const createTodo = async (req, res) => {
 
     //check for validation errors
     // const errors = validationResult(req);
@@ -42,10 +55,10 @@ const createTodo = async (req, res, next) => {
     //         statusCode: 400,
     //         // different way of error presenting
     //         errors:errors.array()
-
+            
     //     })
     // }
-    try {
+    try { 
         const { title, description, dueDate, isActive, status } = req.body;
         const newTodo = await todoService.createTodo(
             title,
@@ -58,19 +71,31 @@ const createTodo = async (req, res, next) => {
             status: "success",
             statusCode: 201,
             message: "Todo task created successfully",
-            data: newTodo
+            data:newTodo
         });
 
     }
     catch (error) {
+        // res.status(500).json({
+        //     status: "error",
+        //     statusCode: 500,
+        //     message: "An error occured while creating todo task",
+        //     errors: [
+        //         {
+        //             msg: error.message,
+        //             name: error.name,
+        //             value: error.value
+        //         }
+        //     ]
+        // });
         next(error); // Pass the error to the error handler middleware
-
-
+        
+        
     }
 
 }
 
-const updateTodo = async (req, res, next) => {
+const updateTodo = async (req, res) => { 
     try {
         const id = req.params.id;
         const { title, description, dueDate, isActive, status } = req.body;
@@ -82,7 +107,7 @@ const updateTodo = async (req, res, next) => {
             isActive,
             status
         );
-        res.status(200).json({
+        res.status(200).json({  
             status: "success",
             statusCode: 200,
             message: "Todo task updated successfully",
@@ -90,12 +115,25 @@ const updateTodo = async (req, res, next) => {
         });
 
     } catch (error) {
+        // res.status(500).json({
+        //     status: "error",
+        //     statusCode: 500,
+        //     message: 'An error occurred while updating the todo task',
+        //     errors: [
+        //         {
+        //             msg: error.message,
+        //             name: error.name,
+        //             value: error.value
+        //         }
+        //     ]
+        // });
         next(error);
+        
     }
-
+   
 }
 
-const deleteTodo = async (req, res, next) => {
+const deleteTodo = async (req, res) => {
     try {
         const id = req.params.id;
         await todoService.deleteTodo(id);
@@ -106,74 +144,26 @@ const deleteTodo = async (req, res, next) => {
         });
     }
     catch (error) {
+        // res.status(500).json({
+        //     status: "error",
+        //     statusCode: 500,
+        //     message: "An error occured while deleting todo task",
+        //     errors: [
+        //         {
+        //             msg: error.message,
+        //             name: error.name,
+        //             value: error.value
+        //         }
+        //     ]
+        // });
         next(error);
-
+        
     }
 }
 
-const getTodosCount = async (req, res, next) => {
-    try {
-        const count = await todoService.getTodosCount();
-        res.status(200).json({
-            status: "success",
-            statusCode: 200,
-            message: "Todo tasks count retrieved successfully",
-            data: count
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
-const getFirstTenTodos = async (req, res, next) => {
-    try {
-        const firstTenTodos = await todoService.getFirstTenTodos();
-        res.status(200).json({
-            status: "success",
-            statusCode: 200,
-            message: "Top Ten Todos Tasks retrieved successfully",
-            data: firstTenTodos
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
-const getFirstTenTodosDuration = async (req, res, next) => {
-    try {
-        const firstTenTodosDuration = await todoService.getFirstTenTodosDuration();
-        res.status(200).json({
-            status: "success",
-            statusCode: 200,
-            message: "Top Ten Todos Tasks duration retrieved successfully",
-            data: firstTenTodosDuration
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
-const getRecentTodos = async (req, res, next) => {
-    try {
-        const recentTodos = await todoService.getRecentTodos();
-        res.status(200).json({
-            status: "success",
-            statusCode: 200,
-            message: "Recently added Todos",
-            data: recentTodos
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
-module.exports = {
+module.exports = {  
     getAllTodos,
     createTodo: [createTodoValidation, createTodo],
     updateTodo,
-    deleteTodo,
-    getTodosCount,
-    getFirstTenTodos,
-    getFirstTenTodosDuration,
-    getRecentTodos
+    deleteTodo
 }
